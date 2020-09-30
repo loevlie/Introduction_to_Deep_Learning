@@ -25,21 +25,21 @@ if [ -z $1 ]; then
 fi
 
 if [ "$1" == "1" ]; then
-    python3 ./autograder/hw1_autograder/runner.py
+    python ./autograder/hw1_autograder/runner.py
 elif [ "$1" == "m" ]; then
-    python3 ./autograder/hw1_autograder/test_mnist.py
+    python ./autograder/hw1_autograder/test_mnist.py
 elif [ "$1" == "1b" ]; then
-    python3 ./autograder/hw1_bonus_autograder/runner.py
+    python ./autograder/hw1_bonus_autograder/runner.py
 elif [ "$1" == "2" ]; then
-    python3 ./autograder/hw2_autograder/runner.py
+    python ./autograder/hw2_autograder/runner.py
 elif [ "$1" == "2b" ]; then
-    python3 ./autograder/hw2_bonus_autograder/runner.py
+    python ./autograder/hw2_bonus_autograder/runner.py
 elif [ "$1" == "3" ]; then
-    python3 ./autograder/hw3_autograder/runner.py
+    python ./autograder/hw3_autograder/runner.py
 elif [ "$1" == "3b" ]; then
-    python3 ./autograder/hw3_bonus_autograder/runner.py
+    python ./autograder/hw3_bonus_autograder/runner.py
 elif [ "$1" == "4" ]; then
-    python3 ./autograder/hw4_autograder/runner.py
+    python ./autograder/hw4_autograder/runner.py
 elif [ "$1" == "4b" ]; then
-    python3 ./autograder/hw4_bonus_autograder/runner.py
+    python ./autograder/hw4_bonus_autograder/runner.py
 fi

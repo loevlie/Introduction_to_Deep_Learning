@@ -138,6 +138,14 @@ def test_big_linear_bn_relu_xeloss_train_eval():
     test_step(mytorch_mlp, mytorch_optimizer, 5, 5, mytorch_criterion=mytorch_criterion)
     return True
 
+def test_big_linear_relu_xeloss_train_eval():
+    np.random.seed(11785)
+    mytorch_mlp = Sequential(Linear(10, 20), ReLU(), Linear(20, 30), ReLU())
+    mytorch_optimizer = SGD(mytorch_mlp.parameters())
+    mytorch_criterion = CrossEntropyLoss()
+    test_step(mytorch_mlp, mytorch_optimizer, 5, 5, mytorch_criterion=mytorch_criterion)
+    return True
+
 
 # momentum tests
 def test_linear_momentum():
@@ -152,6 +160,15 @@ def test_big_linear_batchnorm_relu_xeloss_momentum():
     np.random.seed(11785)
     mytorch_mlp = Sequential(Linear(10, 20), BatchNorm1d(20), ReLU(),
                              Linear(20, 30), BatchNorm1d(30), ReLU())
+    mytorch_optimizer = SGD(mytorch_mlp.parameters(), momentum = 0.9)
+    mytorch_criterion = CrossEntropyLoss()
+    test_step(mytorch_mlp, mytorch_optimizer, 5, 5, mytorch_criterion = mytorch_criterion)
+    return True
+
+def test_big_linear_relu_xeloss_momentum():
+    np.random.seed(11785)
+    mytorch_mlp = Sequential(Linear(10, 20), ReLU(),
+                             Linear(20, 30), ReLU())
     mytorch_optimizer = SGD(mytorch_mlp.parameters(), momentum = 0.9)
     mytorch_criterion = CrossEntropyLoss()
     test_step(mytorch_mlp, mytorch_optimizer, 5, 5, mytorch_criterion = mytorch_criterion)

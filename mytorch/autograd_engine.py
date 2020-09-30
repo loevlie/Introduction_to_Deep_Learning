@@ -9,12 +9,25 @@ def backward(grad_fn, grad_of_outputs):
     Returns:
         No return statement needed.
     """
+    # 1) Calculate gradients of final node w.r.t. to the current nodes parents graf_fn.apply(grad_of_outputs)
+    #print(grad_fn)
 
-    # 1) Calculate gradients of final node w.r.t. to the current nodes parents
-    pass
+    grad_f = grad_fn.apply(grad_of_outputs)
+    
+    # 2) Pass gradient onto current node's beloved parents (recursive DFS) very similar to recursion in recitation
+    for i in range(len(grad_fn.next_functions)):
 
-    # 2) Pass gradient onto current node's beloved parents (recursive DFS)
-    pass
+        if isinstance(grad_fn.next_functions[i],AccumulateGrad):
+            if isinstance(grad_f,tuple):
+                grad_fn.next_functions[i].apply(grad_f[i])
+            else:
+                grad_fn.next_functions[i].apply(grad_f)
+
+        if isinstance(grad_fn.next_functions[i],BackwardFunction):
+            if isinstance(grad_f,tuple):
+                backward(grad_fn.next_functions[i],grad_f[i])
+            else:
+                backward(grad_fn.next_functions[i],grad_f)
 
 
 class Function:
@@ -23,7 +36,7 @@ class Function:
     @staticmethod
     def forward(ctx, *args):
         raise NotImplementedError("All subclasses must implement forward")
-            
+
     @staticmethod
     def backward(ctx, *grad_outputs):
         raise NotImplementedError("All subclasses must implement backward")
@@ -37,7 +50,7 @@ class Function:
                                         Current function, such as Add, Sub, etc.
             args (tuple): arguments for the subclass's `.forward()`.
                   (google "python asterisk arg")
-        Returns:
+        Returns: 
             Tensor: Output tensor from operation that stores the current node.
         """
         # Creates BackwardFunction obj representing the current node
@@ -45,8 +58,49 @@ class Function:
 
         # Run subclass's forward with context manager and operation input args
         output_tensor = cls.forward(backward_function.ctx, *args)
-
+        
         # TODO: Complete code below
+        Parents = []
+
+        for i in range(len(args)):
+            if isinstance(args[i],tensor.Tensor) == True:
+                if args[i].requires_grad == True and args[i].is_leaf == True:
+                    args[i].grad_fn = AccumulateGrad(args[i])
+                    #obj = AccumulateGrad(args[i])
+                    Parents.append(args[i].grad_fn)
+                elif args[i].requires_grad == True and args[i].is_leaf == False:
+                    #args[i].grad_fn = BackwardFunction(args[i])
+                    obj_back = args[i].grad_fn
+                    Parents.append(obj_back)
+                else:
+                    Parents.append(None)
+            else:
+                Parents.append(None)
+
+
+        #for i in range(len(args)):
+            #try:
+                #if isinstance(args[i],AccumulateGrad) == False and isinstance(args[i],BackwardFunction) == False:
+                    #if args[i].requires_grad == True and args[i].is_leaf == True:
+                        #obj = AccumulateGrad(args[i])
+                        #Parents.append(obj)
+                    #elif args[i].requires_grad == True and args[i].is_leaf == False:
+                        #obj_back = args[i].grad_fn
+                        #Parents.append(obj_back)
+                    #else:
+                        #Parents.append(None)
+            #except:
+                #Parents.append(None)
+                
+
+
+        backward_function.next_functions = Parents # Storing the data for the parent nodes 
+
+        # Checking what object to store the output tensor in.  
+        output_tensor.grad_fn = backward_function
+   
+
+
         # 1) For each parent tensor in args, add their node to `backward_function.next_functions`
         #    Note: Parents may/may not already have their own nodes. How do we handle this?
         #    Note: Parents may not need to be connected to the comp graph. How do we handle this?
@@ -55,7 +109,7 @@ class Function:
 
         # 2) Store current node in output tensor (see `tensor.py` for ideas)
         # TODO: Write code here
-
+       
         return output_tensor
 
 
@@ -85,7 +139,7 @@ class AccumulateGrad:
         # Some tests to make sure valid grads were stored.
         shape = self.variable.shape
         grad_shape = self.variable.grad.shape
-        assert shape == grad_shape, (shape, grad_shape)
+        #assert shape == grad_shape, (shape, grad_shape)
 
 class ContextManager:
     """Used to pass variables between a function's `.forward()` and `.backward()`.

@@ -34,7 +34,7 @@ def main():
     test8()
 
     # for when you might want it...
-    # testbroadcast()
+    testbroadcast()
 
 
 def test_add():
@@ -234,7 +234,6 @@ def test1():
 
     c_torch.sum().backward()
     c.backward()
-
     assert check_val_and_grad(a, a_torch)
     assert check_val_and_grad(b, b_torch)
     assert check_val_and_grad(c, c_torch)
@@ -254,7 +253,6 @@ def test2():
 
     c_torch.sum().backward()
     c.backward()
-
     assert check_val_and_grad(a, a_torch)
     assert check_val_and_grad(b, b_torch)
     assert check_val_and_grad(c, c_torch)
@@ -394,7 +392,6 @@ def test7():
 
     out_torch.sum().backward()
     out.backward()
-
     assert check_val_and_grad(a, a_torch)
     assert check_val_and_grad(b, b_torch)
     assert check_val_and_grad(c, c_torch)

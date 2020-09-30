@@ -38,12 +38,12 @@ def visualize_results(val_accuracies):
     try:
         plt.plot(val_accuracies)
         plt.ylabel('Accuracy')
-        plt.savefig('validation_accuracy.png')
+        plt.savefig('hw1/validation_accuracy.png')
         print("Accuracies", val_accuracies)
         # plt.show()
     except Exception as e:
         traceback.print_exc()
-        print("Error: Problems generating plot. See if a .png was generated in base folder. "
+        print("Error: Problems generating plot. See if a .png was generated in hw1/. "
               "If not, check the writeup and Piazza hw1p1 thread.")
 
 

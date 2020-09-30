@@ -102,7 +102,9 @@ class Tensor:
     # ----------------------
     def backward(self):
         """Kicks off autograd backward (see writeup for hints)"""
-        raise Exception("TODO: Kick off `autograd_engine.backward()``")
+        autograd_engine.backward(self.grad_fn,Tensor(np.ones(self.shape)))
+
+        # raise Exception("TODO: Kick off `autograd_engine.backward()``")
 
     # ------------------------------------------
     # Tensor Operations (ARE part of comp graph)
@@ -145,4 +147,18 @@ class Tensor:
         return F.Sub.apply(self,other)
         # raise Exception("TODO: Link '-' to comp. graph, like in __add__()")
 
+    def __mul__(self,other):
+        return F.Mul.apply(self,other)
+
+    def __truediv__(self,other):
+        return F.Div.apply(self,other)
+
+    def sum(self, axis=None, keepdims=False):
+        return F.Sum.apply(self, axis, keepdims)
+
+    def __matmul__(self,b,axis=None,keepdims=False):
+        return F.MatMul.apply(self, b)
+    
+    def relu(self):
+        return F.ReLu.apply(self)
     # TODO: Implement more functions below

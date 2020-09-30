@@ -39,4 +39,4 @@ class CrossEntropyLoss(Loss):
         """
         # Simply calls nn.functional.cross_entropy
         # If you implement your own Function subclass you may need to modify this
-        return F.cross_entropy(predicted, target)
+        return F.cross_entropy.apply(predicted, target)

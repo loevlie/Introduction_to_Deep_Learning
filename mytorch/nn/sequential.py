@@ -45,5 +45,9 @@ class Sequential(Module):
         Returns:
             Tensor: Output after passing through layers
         """
-        raise Exception("TODO!") # loop through self.layers...
+        for layer in self.layers:
+            x = layer(x)
+        return x 
+        # raise Exception("TODO!") # loop through self.layers...
+
 

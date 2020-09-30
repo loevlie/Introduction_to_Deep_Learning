@@ -43,4 +43,7 @@ class Linear(Module):
         Returns:        
             Tensor: (batch_size, out_features)
         """
-        raise Exception("TODO: Implement forward by calling the operations you've made")
+        out = x @ self.weight.T() + self.bias
+
+        return out
+        #raise Exception("TODO: Implement forward by calling the operations you've made")

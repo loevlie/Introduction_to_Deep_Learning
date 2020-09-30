@@ -27,4 +27,9 @@ class SGD(Optimizer):
 
     def step(self):
         """Updates params based on gradients stored in param tensors"""
-        raise Exception("TODO: Implement SGD.step()")
+        for i in range(len(self.params)):
+            if self.params[i].grad == None:
+                continue 
+            self.momentums[i] = self.momentum*self.momentums[i] - self.lr*self.params[i].grad.data
+            self.params[i].data += self.momentums[i]
+

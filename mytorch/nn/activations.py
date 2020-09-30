@@ -1,7 +1,7 @@
 import mytorch.nn.functional as F
 from mytorch.nn.module import Module
-
-
+from mytorch import tensor
+import numpy as np
 class ReLU(Module):
     """ReLU activation function
 
@@ -28,6 +28,7 @@ class ReLU(Module):
         """
 
         # Complete ReLU(Function) class in functional.py, then just call it here
-        raise Exception("TODO!")
+        return F.ReLu.apply(x)
+        #tensor.Tensor(np.maximum(0,x.data))
 
 # You can define more activation functions below (after hw1p1)

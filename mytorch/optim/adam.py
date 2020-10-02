@@ -35,5 +35,13 @@ class Adam(Optimizer):
     def step(self):
         b1, b2 = self.betas # for convenience
         self.t += 1 # increment step num
+        B1 = (1-b1**self.t)
+        B2 = (1-b2**self.t)
+        for i in range(len(self.params)):
+            self.state[i]['m_t'] = b1*self.state[i]['m_t'] + ((1-b1)*self.params[i].grad.data)
+            self.state[i]['v_t'] = b2*self.state[i]['v_t'] + ((1-b2)*self.params[i].grad.data**2)
+            st = self.lr / B1
+            D = (np.sqrt(self.state[i]['v_t'])/np.sqrt(B2)) + self.eps
+            self.params[i].data -= (self.state[i]['m_t']/D)*st
+        
 
-        # TODO: Implement ADAM

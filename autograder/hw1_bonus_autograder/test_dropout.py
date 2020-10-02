@@ -58,7 +58,7 @@ def test_dropout_forward_backward():
     assert model[0].weight.grad.grad_fn is None, "Final gradient tensor must not have its own grad function"
     assert model[0].weight.requires_grad, "Weight tensor must have requires_grad==True"
     assert model[0].weight.is_parameter, "Weight tensor must be marked as a parameter tensor"
-    
+
     test_grad = load_numpy_array('autograder/hw1_bonus_autograder/outputs/backward_grad.npy')
     
     return assertions_all(model[0].weight.grad.data, test_grad, "test_dropout_forward_backward_grad", 1e-5, 1e-6)
@@ -113,6 +113,7 @@ def test_big_model_step():
     # check updated weight values
     assert model[0].weight.requires_grad, "Weight tensor must have requires_grad==True"
     assert model[0].weight.is_parameter, "Weight tensor must be marked as a parameter tensor"
+
     test_weights_3 = load_numpy_array('autograder/hw1_bonus_autograder/outputs/big_weight_update_3.npy')
     test_weights_0 = load_numpy_array('autograder/hw1_bonus_autograder/outputs/big_weight_update_0.npy')
     

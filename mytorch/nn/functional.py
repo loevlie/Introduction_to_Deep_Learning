@@ -285,28 +285,45 @@ class cross_entropy(Function):
         grad_predicted = ((Softmax - one_hot.data)*grad_output.data)/predicted.data.shape[0]
         return (tensor.Tensor(grad_predicted),)
 
+class Dropout(Function):
+    @staticmethod
+    def forward(ctx, x, p=0.5, is_train=False):
+        """Forward pass for dropout layer.
 
-#def cross_entropy(predicted, target):#
-    """Calculates Cross Entropy Loss (XELoss) between logits and true labels.
-    For MNIST, don't call this function directly; use nn.loss.CrossEntropyLoss instead.
+        Args:
+            ctx (ContextManager): For saving variables between forward and backward passes.
+            x (Tensor): Data tensor to perform dropout on
+            p (float): The probability of dropping a neuron output.
+                       (i.e. 0.2 -> 20% chance of dropping)
+            is_train (bool, optional): If true, then the Dropout module that called this
+                                       is in training mode (`<dropout_layer>.is_train == True`).
+                                       
+                                       Remember that Dropout operates differently during train
+                                       and eval mode. During train it drops certain neuron outputs.
+                                       During eval, it should NOT drop any outputs and return the input
+                                       as is. This will also affect backprop correspondingly.
+        """
+        if not type(x).__name__ == 'Tensor':
+            raise Exception("Only dropout for tensors is supported")
+        
+        N = 1 # Binary 
+        q = x.data.shape
+        scale = 1 / (1-p)
+        if is_train:
+            mask = np.random.binomial(N,1-p, size= q) * scale
+        else:
+            mask = np.ones(q)
+        requires_grad = x.requires_grad
+        ctx.save_for_backward(tensor.Tensor(mask, requires_grad=requires_grad,is_leaf=not requires_grad),x)
+        return tensor.Tensor(mask*x.data, requires_grad=requires_grad,is_leaf=not requires_grad)
+        
+    @staticmethod
+    def backward(ctx, grad_output):
+        mask, x = ctx.saved_tensors
+        grad = grad_output.data*mask.data
+        return (tensor.Tensor(grad),)
+        #raise NotImplementedError("TODO: Implement Dropout(Function).backward() for hw1 bonus!")
 
-    Args:
-        predicted (Tensor): (batch_size, num_classes) logits
-        target (Tensor): (batch_size,) true labels
-
-    Returns:
-        Tensor: the loss as a float, in a tensor of shape ()
-    """
-    #batch_size, num_classes = predicted.shape
-
-    # Tip: You can implement XELoss all here, without creating a new subclass of Function.
-    #      However, if you'd prefer to implement a Function subclass you're free to.
-    #      Just be sure that nn.loss.CrossEntropyLoss calls it properly.
-
-    # Tip 2: Remember to divide the loss by batch_size; this is equivalent
-    #        to reduction='mean' in PyTorch's nn.CrossEntropyLoss
-
-    #raise Exception("TODO: Implement XELoss for comp graph")
 
 def to_one_hot(arr, num_classes):
     """(Freebie) Converts a tensor of classes to one-hot, useful in XELoss

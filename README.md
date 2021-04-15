@@ -6,3 +6,5 @@
 * ADAM optimizer
 * Dropout Layers
 * ReLU Activation
+
+This work has helped give me a deeper :laughing: understanding of the PyTorch framework.  

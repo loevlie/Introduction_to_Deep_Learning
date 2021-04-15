@@ -10,4 +10,3 @@
 * ADAM optimizer
 * Dropout Layers
 * ReLU Activation
-* BatchNorm1d

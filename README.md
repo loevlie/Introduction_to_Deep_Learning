@@ -7,4 +7,4 @@
 * Dropout Layers
 * ReLU Activation
 
-This work has helped give me a deeper :laughing: understanding of the PyTorch framework.  
+This work has helped me gain a deeper :laughing: understanding of the PyTorch framework.  
